@@ -1,5 +1,6 @@
 import "./App.css";
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 function App() {
   const [user, setUser] = useState({
@@ -10,17 +11,16 @@ function App() {
   });
   const [userId, setUserId] = useState(null);
   const fetchData = async (id) => {
-    // setUserId(id);
-    const response = await fetch(`https://reqres.in/api/users/${id}`);
-    const value = await response.json();
-    const userData = value.data;
-    if (userData) {
+    try {
+      const response = await axios.get(`https://reqres.in/api/users/${id}`);
+      console.log(response.data.data);
+      const userData = response.data.data;
       setUser({
         name: userData.first_name + " " + userData.last_name,
         email: userData.email,
         image: userData.avatar,
       });
-    } else {
+    } catch (error) {
       alert("Failed to fetch data");
     }
   };
